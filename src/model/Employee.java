@@ -21,7 +21,7 @@ public abstract class Employee implements Serializable {
 
     public abstract double calculateSalary();
 
-    public abstract String getType();
+    public abstract EmployeeType getType();
 
     public int getId() { return id; }
     public String getName() { return name; }

@@ -19,7 +19,7 @@ public class PartTimeEmployee extends Employee {
     }
 
     @Override
-    public String getType() { return "Part-Time"; }
+    public EmployeeType getType() { return EmployeeType.PART_TIME ; }
 
     public double getHourlyRate() { return hourlyRate; }
     public double getHoursWorked() { return hoursWorked; }

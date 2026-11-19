@@ -19,7 +19,7 @@ public class FullTimeEmployee extends Employee {
     }
 
     @Override
-    public String getType() { return "Full-Time"; }
+    public EmployeeType getType() { return EmployeeType.FULL_TIME; }
 
     public double getBasicSalary() { return basicSalary; }
     public double getBonus() { return bonus; }
