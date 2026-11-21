@@ -1,26 +1,33 @@
 package Service;
 
+import files.FileHandler;
 import java.util.ArrayList;
 import model.Department;
 
 public class DepartmentManager {
 
-    private ArrayList<Department> departments;
+    private final FileHandler fileHandler;
+    private final ArrayList<Department> departments;
 
     public DepartmentManager() {
-        departments = new ArrayList<>();
+        fileHandler = new FileHandler();
+        departments = fileHandler.loadDepartments();   
+    }
+
+    public boolean saveToFile() {
+        return fileHandler.saveDepartment(departments);
     }
 
     public boolean isAvailableId(int id) {
         for (Department d : departments) {
-            if (id == d.getDepartmentId()) {
+            if (d.getDepartmentId() == id) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean isAvailableName(Department name) {
+    public boolean isAvailableName(String name) {
         for (Department d : departments) {
             if (d.hasSameName(name)) {
                 return false;
@@ -30,26 +37,20 @@ public class DepartmentManager {
     }
 
     public boolean addDepartment(Department dep) {
-        if (dep == null) {
+        if (dep == null
+                || !isAvailableId(dep.getDepartmentId())
+                || !isAvailableName(dep.getDepartmentName())) {
             return false;
-        } else {
-            if (isAvailableId(dep.getDepartmentId())) {
-                if (isAvailableName(dep.getDepartmentName())) {
-                    departments.add(dep);
-                    return true;
-
-                }
-                return false;
-
-            }
-            return false;
-
         }
+        departments.add(dep);
+        if (!saveToFile()) {
+            departments.remove(dep);   
+            return false;
+        }
+        return true;
     }
 
     public ArrayList<Department> getAllDepartments() {
-
         return new ArrayList<>(departments);
     }
-
 }

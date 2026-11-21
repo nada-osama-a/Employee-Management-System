@@ -7,9 +7,9 @@ public class Department implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int departmentId;
-    private Department departmentName;
+    private String departmentName;          
 
-    public Department(int departmentId, Department departmentName) {
+    public Department(int departmentId, String departmentName) {
         setDepartmentId(departmentId);
         setDepartmentName(departmentName);
     }
@@ -18,7 +18,7 @@ public class Department implements Serializable {
         return departmentId;
     }
 
-    public Department getDepartmentName() {
+    public String getDepartmentName() {
         return departmentName;
     }
 
@@ -29,17 +29,20 @@ public class Department implements Serializable {
         this.departmentId = departmentId;
     }
 
-    public final void setDepartmentName(Department departmentName) {
-        if (departmentName == null) {
+    public final void setDepartmentName(String departmentName) {
+        if (departmentName == null || departmentName.trim().isEmpty()) {
             throw new IllegalArgumentException("Department name cannot be empty.");
         }
-        this.departmentName = departmentName;
+        this.departmentName = departmentName.trim();
     }
 
-    public boolean hasSameName(Department other) {
-        return other != null && departmentName == other;
+   
+    public boolean hasSameName(String other) {
+        return other != null && departmentName.equalsIgnoreCase(other.trim());
     }
 
-    // @Override
-    // public String toString() { return departmentName; }
+    @Override
+    public String toString() {      
+        return departmentName;
+    }
 }
