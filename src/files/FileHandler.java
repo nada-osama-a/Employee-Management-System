@@ -1,4 +1,3 @@
-
 package files;
 
 import java.io.*;
@@ -19,21 +18,28 @@ public class FileHandler {
     }
 
     public boolean saveEmployees(ArrayList<Employee> employees) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(EMPLOYEES_FILE))) // make new one if
-                                                                                                    // needed
-        {
-            out.writeObject(employees);
-            return true;
-        } catch (IOException ex) {
-            return false;
-        }
+        return save(EMPLOYEES_FILE, employees);
     }
 
     public boolean saveDepartment(ArrayList<Department> departments) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DEPARTMENTS_FILE))) // make new one if
-                                                                                                      // needed
-        {
-            out.writeObject(departments);
+        return save(DEPARTMENTS_FILE, departments);
+    }
+
+    public ArrayList<Employee> loadEmployees() {
+        return load(EMPLOYEES_FILE);
+    }
+
+    public ArrayList<Department> loadDepartments() {
+        return load(DEPARTMENTS_FILE);
+    }
+
+    // The FileOutputStream/FileInputStream are declared as their own resources so they are
+    // ALWAYS closed, even if the ObjectOutputStream/ObjectInputStream constructor throws
+    // (e.g. a corrupted file). Otherwise the file stays locked on Windows.
+    private boolean save(String path, Object data) {
+        try (FileOutputStream fos = new FileOutputStream(path);
+             ObjectOutputStream out = new ObjectOutputStream(fos)) {
+            out.writeObject(data);
             return true;
         } catch (IOException ex) {
             return false;
@@ -41,29 +47,16 @@ public class FileHandler {
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<Employee> loadEmployees() {
-        File file = new File(EMPLOYEES_FILE);
+    private <T> ArrayList<T> load(String path) {
+        File file = new File(path);
         if (!file.exists()) {
             return new ArrayList<>();
         }
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            return (ArrayList<Employee>) in.readObject();
+        try (FileInputStream fis = new FileInputStream(file);
+             ObjectInputStream in = new ObjectInputStream(fis)) {
+            return (ArrayList<T>) in.readObject();
         } catch (IOException | ClassNotFoundException | ClassCastException ex) {
             return new ArrayList<>();
         }
     }
-
-    @SuppressWarnings("unchecked")
-    public ArrayList<Department> loadDepartments() {
-        File file = new File(DEPARTMENTS_FILE);
-        if (!file.exists()) {
-            return new ArrayList<>();
-        }
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            return (ArrayList<Department>) in.readObject();
-        } catch (IOException | ClassNotFoundException | ClassCastException ex) {
-            return new ArrayList<>();
-        }
-    }
-
 }

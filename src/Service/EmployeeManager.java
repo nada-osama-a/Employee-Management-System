@@ -50,6 +50,21 @@ public class EmployeeManager {
         return null;
     }
 
+    
+    public List<Employee> searchByName(String name) {
+        List<Employee> result = new ArrayList<>();
+        if (name == null || name.trim().isEmpty()) {
+            return result;
+        }
+        String query = name.trim().toLowerCase();
+        for (Employee emp : employees) {
+            if (emp.getName().toLowerCase().contains(query)) {
+                result.add(emp);
+            }
+        }
+        return result;
+    }
+
     public List<Employee> filterByDepartment(Department department) {
         List<Employee> result = new ArrayList<>();
         if (department == null) {
