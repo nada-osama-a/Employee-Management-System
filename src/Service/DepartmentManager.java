@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Service;
 
 import java.util.ArrayList;
 import model.Department;
 
-/**
- *
- * @author Yomna Mohamed
- */
 public class DepartmentManager {
 
     private ArrayList<Department> departments;
@@ -59,6 +51,5 @@ public class DepartmentManager {
 
             return new ArrayList<>(departments);
         }
-
-
+    
 }
