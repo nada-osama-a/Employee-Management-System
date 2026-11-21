@@ -1,27 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import model.Employee;
-import model.Department;
-import model.EmployeeType;
-import model.FullTimeEmployee;
-import model.PartTimeEmployee;
+import model.*;
+import files.FileHandler;
 
-/**
- *
- * @author Yomna Mohamed
- */
 public class EmployeeManager {
 
+    private FileHandler fileHandler;
     private ArrayList<Employee> employees;
 
     public EmployeeManager() {
-        employees = new ArrayList<>();
+        fileHandler = new FileHandler();
+        employees = fileHandler.loadEmployees(); 
+    }
+
+    public boolean saveToFile() {
+        return fileHandler.saveEmployees(employees);
     }
 
     public boolean isAvailableId(int id) {
@@ -33,17 +28,17 @@ public class EmployeeManager {
         return true;
     }
 
+  
     public boolean addEmployee(Employee emp) {
-        if (emp == null) {
+        if (emp == null || !isAvailableId(emp.getId())) {
             return false;
         }
-
-        if (isAvailableId(emp.getId())) {
-            employees.add(emp);
-            return true;
+        employees.add(emp);
+        if (!saveToFile()) {
+            employees.remove(emp); 
+            return false;
         }
-
-        return false;
+        return true;
     }
 
     public Employee searchById(int id) {
@@ -65,15 +60,16 @@ public class EmployeeManager {
                 result.add(emp);
             }
         }
-
         return result;
     }
 
-    public String updateEmployee(int id, String newPosition, Department newDepartment, EmployeeType newType, double a, double b) {
+    public String updateEmployee(int id, String newPosition, Department newDepartment,
+                                 EmployeeType newType, double a, double b) {
         int index = -1;
         for (int i = 0; i < employees.size(); i++) {
             if (employees.get(i).getId() == id) {
                 index = i;
+                break;
             }
         }
         if (index == -1) {
@@ -104,35 +100,41 @@ public class EmployeeManager {
             } else {
                 type = newType;
             }
-
             Employee updated;
-            if (type == old.getType()) {
-                old.setPosition(position);
-                old.setDepartment(dep);
-                updated = old;
-            } else if (type == EmployeeType.FULL_TIME) {
+            if (type == EmployeeType.FULL_TIME) {
                 updated = new FullTimeEmployee(old.getId(), old.getName(), old.getAge(), dep, position, a, b);
             } else {
                 updated = new PartTimeEmployee(old.getId(), old.getName(), old.getAge(), dep, position, a, b);
             }
-            
+
             employees.set(index, updated);
 
-        }
-        catch(IllegalArgumentException e){
+            if (!saveToFile()) {
+                employees.set(index, old);
+                return "Error saving data to file.";
+            }
+        } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
-        
-        //saveEmployees();
         return null;
-        
-
     }
-    
-    
+
+
+    public boolean deleteEmployee(int id) {
+        for (int i = 0; i < employees.size(); i++) {
+            if (employees.get(i).getId() == id) {
+                Employee removed = employees.remove(i);
+                if (!saveToFile()) {
+                    employees.add(i, removed); // roll back
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
     public ArrayList<Employee> getAllEmployees() {
         return new ArrayList<>(employees);
     }
-
 }

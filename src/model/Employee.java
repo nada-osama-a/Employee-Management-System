@@ -23,14 +23,29 @@ public abstract class Employee implements Serializable {
 
     public abstract EmployeeType getType();
 
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public int getAge() { return age; }
-    public Department getDepartment() { return department; }
-    public String getPosition() { return position; }
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public String getPosition() {
+        return position;
+    }
 
     public final void setId(int id) {
-        if (id <= 0) throw new IllegalArgumentException("Employee ID must be a positive integer.");
+        if (id <= 0)
+            throw new IllegalArgumentException("Employee ID must be a positive integer.");
         this.id = id;
     }
 
@@ -41,7 +56,8 @@ public abstract class Employee implements Serializable {
     }
 
     public final void setAge(int age) {
-        if (age <= 0) throw new IllegalArgumentException("Age must be a positive integer.");
+        if (age <= 0)
+            throw new IllegalArgumentException("Age must be a positive integer.");
         this.age = age;
     }
 

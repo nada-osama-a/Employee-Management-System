@@ -1,13 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Validation;
-
-/**
- *
- * @author Yomna Mohamed
- */
 
 public class Validator {
 
@@ -44,15 +35,15 @@ public class Validator {
     public static boolean isValidName(String name) {
         return isNotEmpty(name);
     }
-    
+
     public static boolean isValidDepartment(String department) {
         return isNotEmpty(department);
     }
-    
+
     public static boolean isValidPosition(String position) {
         return isNotEmpty(position);
     }
-    
+
     public static boolean isValidBasicSalary(String salary) {
         return isNonNegativeNumber(salary);
     }
@@ -68,7 +59,7 @@ public class Validator {
     public static boolean isValidHoursWorked(String hours) {
         return isNonNegativeNumber(hours);
     }
-    
+
     public static boolean isNonNegativeNumber(String value) {
         if (!isNotEmpty(value)) {
             return false;
