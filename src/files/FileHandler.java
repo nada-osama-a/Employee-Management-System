@@ -33,9 +33,6 @@ public class FileHandler {
         return load(DEPARTMENTS_FILE);
     }
 
-    // The FileOutputStream/FileInputStream are declared as their own resources so they are
-    // ALWAYS closed, even if the ObjectOutputStream/ObjectInputStream constructor throws
-    // (e.g. a corrupted file). Otherwise the file stays locked on Windows.
     private boolean save(String path, Object data) {
         try (FileOutputStream fos = new FileOutputStream(path);
              ObjectOutputStream out = new ObjectOutputStream(fos)) {
