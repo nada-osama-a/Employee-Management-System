@@ -5,7 +5,9 @@
 package Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import model.Employee;
+import model.Department;
 /**
  *
  * @author Yomna Mohamed
@@ -38,6 +40,31 @@ public class EmployeeManager {
 
         return false;
     }
+    
+    public Employee searchById(int id){
+        for(Employee emp : employees){
+            if(emp.getId() == id)
+                return emp;
+        }
+        return null; 
+    }
+    
+    public List<Employee> filterByDepartment(Department department){
+        List<Employee> result = new ArrayList<>();
+        if(department == null )
+            return result;
+        for(Employee emp : employees){
+            if(emp.getDepartment() == department)
+                result.add(emp);
+        }
+        
+        return result;
+    }
+    
+   
+    
+    
+    
 
     public ArrayList<Employee> getAllEmployees() {
         return new ArrayList<>(employees);
