@@ -61,7 +61,7 @@ public class EmployeeManager {
             return result;
         }
         for (Employee emp : employees) {
-            if (emp.getDepartment() == department) {
+            if (emp.getDepartment().getDepartmentId() == department.getDepartmentId()) {
                 result.add(emp);
             }
         }
@@ -111,9 +111,9 @@ public class EmployeeManager {
                 old.setDepartment(dep);
                 updated = old;
             } else if (type == EmployeeType.FULL_TIME) {
-                updated = new FullTimeEmployee(old.getId(), old.getName(), old.getAge(), old.getDepartment(), old.getPosition(), a, b);
+                updated = new FullTimeEmployee(old.getId(), old.getName(), old.getAge(), dep, position, a, b);
             } else {
-                updated = new PartTimeEmployee(old.getId(), old.getName(), old.getAge(), old.getDepartment(), old.getPosition(), a, b);
+                updated = new PartTimeEmployee(old.getId(), old.getName(), old.getAge(), dep, position, a, b);
             }
             
             employees.set(index, updated);
@@ -122,7 +122,8 @@ public class EmployeeManager {
         catch(IllegalArgumentException e){
             return e.getMessage();
         }
-        //save();
+        
+        //saveEmployees();
         return null;
         
 
