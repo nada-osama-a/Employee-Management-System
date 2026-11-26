@@ -8,10 +8,10 @@ public abstract class Employee implements Serializable {
     private int id;
     private String name;
     private int age;
-    private Department department;
+    private String department;
     private String position;
 
-    public Employee(int id, String name, int age, Department department, String position) {
+    public Employee(int id, String name, int age, String department, String position) {
         setId(id);
         setName(name);
         setAge(age);
@@ -35,7 +35,7 @@ public abstract class Employee implements Serializable {
         return age;
     }
 
-    public Department getDepartment() {
+    public  String getDepartment() {
         return department;
     }
 
@@ -61,7 +61,7 @@ public abstract class Employee implements Serializable {
         this.age = age;
     }
 
-    public final void setDepartment(Department department) {
+    public final void setDepartment(String department) {
         if (department == null)
             throw new IllegalArgumentException("Department cannot be empty.");
         this.department = department;

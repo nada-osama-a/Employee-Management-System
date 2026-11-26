@@ -12,7 +12,7 @@ public class EmployeeManager {
 
     public EmployeeManager() {
         fileHandler = new FileHandler();
-        employees = fileHandler.loadEmployees(); 
+        employees = fileHandler.loadEmployees();
     }
 
     public boolean saveToFile() {
@@ -28,16 +28,18 @@ public class EmployeeManager {
         return true;
     }
 
-  
     public boolean addEmployee(Employee emp) {
         if (emp == null || !isAvailableId(emp.getId())) {
             return false;
         }
+
         employees.add(emp);
+
         if (!saveToFile()) {
-            employees.remove(emp); 
+            employees.remove(emp);
             return false;
         }
+
         return true;
     }
 
@@ -47,46 +49,58 @@ public class EmployeeManager {
                 return emp;
             }
         }
+
         return null;
     }
 
-    
     public List<Employee> searchByName(String name) {
         List<Employee> result = new ArrayList<>();
+
         if (name == null || name.trim().isEmpty()) {
             return result;
         }
+
         String query = name.trim().toLowerCase();
+
         for (Employee emp : employees) {
             if (emp.getName().toLowerCase().contains(query)) {
                 result.add(emp);
             }
         }
+
         return result;
     }
 
     public List<Employee> filterByDepartment(Department department) {
         List<Employee> result = new ArrayList<>();
+
         if (department == null) {
             return result;
         }
+
         for (Employee emp : employees) {
-            if (emp.getDepartment().getDepartmentId() == department.getDepartmentId()) {
+            if (emp.getDepartment().equalsIgnoreCase(
+                    department.getDepartmentName())) {
                 result.add(emp);
             }
         }
+
         return result;
     }
 
-    public String updateEmployee(int id, String newPosition, Department newDepartment,
-                                 EmployeeType newType, double a, double b) {
+    public String updateEmployee(int id, String newPosition,
+            Department newDepartment, EmployeeType newType,
+            double a, double b) {
+
         int index = -1;
+
         for (int i = 0; i < employees.size(); i++) {
             if (employees.get(i).getId() == id) {
                 index = i;
                 break;
             }
         }
+
         if (index == -1) {
             return "Employee not found.";
         }
@@ -95,7 +109,7 @@ public class EmployeeManager {
 
         try {
             String position;
-            Department dep;
+            String dep;
             EmployeeType type;
 
             if (newPosition == null || newPosition.trim().isEmpty()) {
@@ -107,7 +121,7 @@ public class EmployeeManager {
             if (newDepartment == null) {
                 dep = old.getDepartment();
             } else {
-                dep = newDepartment;
+                dep = newDepartment.getDepartmentName();
             }
 
             if (newType == null) {
@@ -115,11 +129,32 @@ public class EmployeeManager {
             } else {
                 type = newType;
             }
+
             Employee updated;
+
             if (type == EmployeeType.FULL_TIME) {
-                updated = new FullTimeEmployee(old.getId(), old.getName(), old.getAge(), dep, position, a, b);
+
+                updated = new FullTimeEmployee(
+                        old.getId(),
+                        old.getName(),
+                        old.getAge(),
+                        dep,
+                        position,
+                        a,
+                        b
+                );
+
             } else {
-                updated = new PartTimeEmployee(old.getId(), old.getName(), old.getAge(), dep, position, a, b);
+
+                updated = new PartTimeEmployee(
+                        old.getId(),
+                        old.getName(),
+                        old.getAge(),
+                        dep,
+                        position,
+                        a,
+                        b
+                );
             }
 
             employees.set(index, updated);
@@ -128,24 +163,30 @@ public class EmployeeManager {
                 employees.set(index, old);
                 return "Error saving data to file.";
             }
+
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
+
         return null;
     }
 
-
     public boolean deleteEmployee(int id) {
         for (int i = 0; i < employees.size(); i++) {
+
             if (employees.get(i).getId() == id) {
+
                 Employee removed = employees.remove(i);
+
                 if (!saveToFile()) {
-                    employees.add(i, removed); // roll back
+                    employees.add(i, removed);
                     return false;
                 }
+
                 return true;
             }
         }
+
         return false;
     }
 
