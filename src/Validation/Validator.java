@@ -33,7 +33,7 @@ public class Validator {
     }
 
     public static boolean isValidName(String name) {
-        return isNotEmpty(name);
+        return isNotEmpty(name);   
     }
 
     public static boolean isValidDepartment(String department) {
