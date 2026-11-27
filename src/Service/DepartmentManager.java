@@ -27,7 +27,7 @@ public class DepartmentManager {
         return true;
     }
 
-    public boolean isAvailableName(String name) {
+    public boolean isAvailableName(Department name) {
         for (Department d : departments) {
             if (d.hasSameName(name)) {
                 return false;

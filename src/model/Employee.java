@@ -8,10 +8,10 @@ public abstract class Employee implements Serializable {
     private int id;
     private String name;
     private int age;
-    private String department;
+    private Department department;
     private String position;
 
-    public Employee(int id, String name, int age, String department, String position) {
+    public Employee(int id, String name, int age, Department department, String position) {
         setId(id);
         setName(name);
         setAge(age);
