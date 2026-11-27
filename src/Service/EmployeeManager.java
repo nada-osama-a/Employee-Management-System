@@ -41,14 +41,13 @@ public class EmployeeManager {
         return true;
     }
 
-    public List<Employee> searchById(int id) {
-        List<Employee> result = new ArrayList<>();
+    public Employee searchById(int id) {
         for (Employee emp : employees) {
             if (emp.getId() == id) {
-                result.add(emp);
+                return emp;
             }
         }
-        return result;
+        return null;
     }
 
     

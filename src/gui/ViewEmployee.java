@@ -1,28 +1,32 @@
-
 package gui;
 
 import Service.*;
 import model.*;
+
+import java.util.List;
+
 import javax.swing.*;
 
 public class ViewEmployee extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ViewEmployee.class.getName());
+    private Employee employee;
+    private final EmployeeManager employeeManager;                     
+    private final List<Department> departments;   // replaces departmentManager
+    private final Runnable onUpdated;
+  
 
-    private Employee employee;                     
-    private final EmployeeManager employeeManager;
-    private final DepartmentManager departmentManager;
-
-    public ViewEmployee(Employee employee, EmployeeManager employeeManager,
-                        DepartmentManager departmentManager) {
-        this.employee = employee;
+    public ViewEmployee(EmployeeManager employeeManager, List<Department> departments,
+            Employee employee, Runnable onUpdated) {
         this.employeeManager = employeeManager;
-        this.departmentManager = departmentManager;
+        this.departments = departments;
+        this.employee = employee;
+        this.onUpdated = onUpdated;
         initComponents();
         loadEmployee();
         setLocationRelativeTo(null);
     }
-        private void loadEmployee() {
+    private void loadEmployee() {
         if (employee == null) {
             JOptionPane.showMessageDialog(this, "No employee to display.");
             dispose();
@@ -254,6 +258,8 @@ public class ViewEmployee extends javax.swing.JFrame {
 
         if (employeeManager.deleteEmployee(employee.getId())) {
             JOptionPane.showMessageDialog(this, "Employee deleted successfully!");
+            if (onUpdated != null)
+                onUpdated.run();
             dispose();
         } else {
             JOptionPane.showMessageDialog(this,
@@ -261,16 +267,16 @@ public class ViewEmployee extends javax.swing.JFrame {
             delete.setSelected(false);
         }
 
-}
-    }//GEN-LAST:event_deleteActionPerformed
+    }
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
         update.setSelected(false);
 
         new UpdatePanel(
             employeeManager,
-            departmentManager.getAllDepartments(),
+            departments,
             employee,
+            
             () -> {
                 // runs after a successful update
                 Employee fresh = employeeManager.searchById(employee.getId());
@@ -290,7 +296,11 @@ public class ViewEmployee extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             EmployeeManager em = new EmployeeManager();
             DepartmentManager dm = new DepartmentManager();
-            new ViewEmployee(em.getAllEmployees().get(0), em, dm).setVisible(true);
+            if (em.getAllEmployees().isEmpty()) {
+                System.out.println("No employees saved yet.");
+                return;
+            }
+            new ViewEmployee(em, dm.getAllDepartments(), em.getAllEmployees().get(0), null).setVisible(true);
         });
     }
 

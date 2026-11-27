@@ -209,7 +209,7 @@ public class AddEmployeePanel extends JPanel {
                         employeeId,
                         name,
                         employeeAge,
-                        department.getDepartmentName(),
+                        department,
                         position,
                         Double.parseDouble(basic),
                         Double.parseDouble(bonus));
@@ -232,7 +232,7 @@ public class AddEmployeePanel extends JPanel {
                         employeeId,
                         name,
                         employeeAge,
-                        department.getDepartmentName(),
+                        department,
                         position,
                         Double.parseDouble(rate),
                         Double.parseDouble(hours));

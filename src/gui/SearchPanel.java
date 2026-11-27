@@ -194,7 +194,7 @@ public class SearchPanel extends javax.swing.JFrame {
             Employee selected = getselectEmployee();
 
             if (selected != null) {
-                new ViewEmployee(manager, selected,
+                new ViewEmployee(manager,departments, selected ,
                         () -> refreshTable(manager.getAllEmployees())).setVisible(true);
 
             }
@@ -214,7 +214,12 @@ public class SearchPanel extends javax.swing.JFrame {
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            result.retainAll(manager.searchById(Integer.parseInt(idText)));
+            Employee found = manager.searchById(Integer.parseInt(idText));
+            if (found != null) {
+                result.add(found);
+            } else {
+                result.clear();
+            }
         }
 
         if (!nameText.isEmpty()) {
@@ -264,31 +269,30 @@ public class SearchPanel extends javax.swing.JFrame {
         }
 
         int id = (int) tableModel.getValueAt(row, 0);
-        List<Employee> found = manager.searchById(id);
-        return found.isEmpty() ? null : found.get(0);
+        return manager.searchById(id);
     }
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    // public static void main(String args[]) {
+    //     /* Set the Nimbus look and feel */
+    //     //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    //     /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    //      * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+    //      */
+    //     try {
+    //         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+    //             if ("Nimbus".equals(info.getName())) {
+    //                 javax.swing.UIManager.setLookAndFeel(info.getClassName());
+    //                 break;
+    //             }
+    //         }
+    //     } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+    //         logger.log(java.util.logging.Level.SEVERE, null, ex);
+    //     }
+    //     //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new SearchPanel().setVisible(true));
-    }
+    //     /* Create and display the form */
+    //     java.awt.EventQueue.invokeLater(() -> new SearchPanel(manager , departments).setVisible(true));
+    // }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
