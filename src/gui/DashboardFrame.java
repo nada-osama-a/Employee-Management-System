@@ -2,6 +2,8 @@ package gui;
 
 import Service.DepartmentManager;
 import Service.EmployeeManager;
+import model.Department;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -9,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.BorderFactory;
@@ -25,6 +29,8 @@ public class DashboardFrame extends JFrame {
     private final String username;
     private final EmployeeManager employeeManager = new EmployeeManager();
     private final DepartmentManager departmentManager = new DepartmentManager();
+    private final List<Department> deps = departmentManager.getAllDepartments();
+    private final AddEmployeePanel addEmployeePanel = new AddEmployeePanel(employeeManager, departmentManager);
 
     public DashboardFrame(String username) {
         this.username = username;
@@ -76,12 +82,16 @@ public class DashboardFrame extends JFrame {
         return sidebar;
     }
 
+    public void addPage(String title, JFrame frame) {
+        JPanel wrapper = new JPanel(new java.awt.BorderLayout());
+        wrapper.add(frame.getContentPane(), java.awt.BorderLayout.CENTER);
+        addPage(title, wrapper);
+    }
     private void registerPages() {
         addPage("Home", buildHomePanel());
-        addPage("Add Employee", new PlaceholderPanel("Add Employee"));
-        addPage("View Employees", new PlaceholderPanel("View Employees"));
-        addPage("Search & Update", new PlaceholderPanel("Search & Update"));
-        addPage("Departments", new PlaceholderPanel("Departments"));
+        addPage("Add Employee", new AddEmployeePanel(employeeManager, departmentManager));
+        addPage("Employees", new SearchPanel(employeeManager, deps));   // JPanel or JFrame both work now
+        addPage("Departments", new DepartmentPanel(departmentManager, addEmployeePanel));
     }
 
     private void addPage(String title, JPanel panel) {

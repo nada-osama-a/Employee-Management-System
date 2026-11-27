@@ -65,7 +65,6 @@ public class DepartmentPanel extends JPanel {
 
         // Button Action
         addButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Button Clicked!");
             addDepartment();
         });
 
