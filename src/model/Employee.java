@@ -8,10 +8,10 @@ public abstract class Employee implements Serializable {
     private int id;
     private String name;
     private int age;
-    private String department;
+    private Department department;
     private String position;
 
-    public Employee(int id, String name, int age, String department, String position) {
+    public Employee(int id, String name, int age, Department department, String position) {
         setId(id);
         setName(name);
         setAge(age);
@@ -21,16 +21,31 @@ public abstract class Employee implements Serializable {
 
     public abstract double calculateSalary();
 
-    public abstract String getType();
+    public abstract EmployeeType getType();
 
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public int getAge() { return age; }
-    public String getDepartment() { return department; }
-    public String getPosition() { return position; }
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public String getPosition() {
+        return position;
+    }
 
     public final void setId(int id) {
-        if (id <= 0) throw new IllegalArgumentException("Employee ID must be a positive integer.");
+        if (id <= 0)
+            throw new IllegalArgumentException("Employee ID must be a positive integer.");
         this.id = id;
     }
 
@@ -41,14 +56,15 @@ public abstract class Employee implements Serializable {
     }
 
     public final void setAge(int age) {
-        if (age <= 0) throw new IllegalArgumentException("Age must be a positive integer.");
+        if (age <= 0)
+            throw new IllegalArgumentException("Age must be a positive integer.");
         this.age = age;
     }
 
-    public final void setDepartment(String department) {
-        if (department == null || department.trim().isEmpty())
+    public final void setDepartment(Department department) {
+        if (department == null)
             throw new IllegalArgumentException("Department cannot be empty.");
-        this.department = department.trim();
+        this.department = department;
     }
 
     public final void setPosition(String position) {
