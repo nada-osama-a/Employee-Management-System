@@ -17,27 +17,22 @@ public class MainFrame extends JFrame {
         departmentManager = new DepartmentManager();
 
         setTitle("Employee Management System");
-        setSize(800, 650);
+        setSize(900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Main Panel
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        AppTheme.stylePanel(mainPanel);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Application Title
         JLabel titleLabel = new JLabel(
                 "Employee Management System",
                 SwingConstants.CENTER);
+        AppTheme.styleTitle(titleLabel);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(12, 10, 12, 10));
 
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-
-        titleLabel.setBorder(
-                BorderFactory.createEmptyBorder(20, 10, 15, 10));
-
-        // Tabs
         JTabbedPane tabs = new JTabbedPane();
-
-        tabs.setFont(new Font("Arial", Font.BOLD, 14));
+        tabs.setFont(AppTheme.FONT_BOLD);
 
         AddEmployeePanel employeePanel = new AddEmployeePanel(employeeManager, departmentManager);
 
@@ -48,7 +43,6 @@ public class MainFrame extends JFrame {
         tabs.addTab("Employees", employeePanel);
         tabs.addTab("Departments", departmentPanel);
 
-        // Add Components
         mainPanel.add(titleLabel, BorderLayout.NORTH);
         mainPanel.add(tabs, BorderLayout.CENTER);
 

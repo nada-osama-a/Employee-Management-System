@@ -25,7 +25,21 @@ public class SearchPanel extends javax.swing.JFrame {
 
         setupDepartmentCombo();
         setupTable();
+        applyTheme();
+        reloadResults();
         setLocationRelativeTo(null);
+    }
+
+    public void refreshDepartments() {
+        Object selected = jComboBox1.getSelectedItem();
+        setupDepartmentCombo();
+        if (selected != null) {
+            jComboBox1.setSelectedItem(selected);
+        }
+    }
+
+    public void reloadResults() {
+        refreshTable(manager.getAllEmployees());
     }
 
     private void setupDepartmentCombo() {
@@ -47,7 +61,20 @@ public class SearchPanel extends javax.swing.JFrame {
         };
         jTable1.setModel(tableModel);
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTable1.setRowHeight(24);
+        AppTheme.styleTable(jTable1);
+    }
+
+    private void applyTheme() {
+        getContentPane().setBackground(AppTheme.BACKGROUND);
+        AppTheme.styleSubtitle(jLabel4);
+        AppTheme.styleSubtitle(jLabel5);
+        AppTheme.styleLabel(jLabel1);
+        AppTheme.styleLabel(jLabel2);
+        AppTheme.styleLabel(jLabel3);
+        AppTheme.styleField(jTextField1);
+        AppTheme.styleField(jTextField2);
+        AppTheme.styleCombo(jComboBox1);
+        AppTheme.stylePrimaryButton(jButton1);
     }
 
     /**
@@ -155,9 +182,9 @@ public class SearchPanel extends javax.swing.JFrame {
                                                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jScrollPane1,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 836,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addContainerGap(19, Short.MAX_VALUE)));
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE, 700,
+                                                                Short.MAX_VALUE))))
+                                .addContainerGap(20, Short.MAX_VALUE)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -182,8 +209,8 @@ public class SearchPanel extends javax.swing.JFrame {
                                 .addGap(39, 39, 39)
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280,
+                                        Short.MAX_VALUE)
                                 .addContainerGap(20, Short.MAX_VALUE)));
 
         pack();
@@ -224,11 +251,6 @@ public class SearchPanel extends javax.swing.JFrame {
         Department selectedDep = getSelectedDepartment();
         List<Employee> result = manager.getAllEmployees();
 
-        if (idText.isEmpty() && nameText.isEmpty() && getSelectedDepartment() == null) {
-            JOptionPane.showMessageDialog(this, "Enter an ID, a name, or choose a department.");
-            return;
-        }
-
         if (Validator.isNotEmpty(idText)) {
             if (!Validator.isValidId(idText)) {
                 JOptionPane.showMessageDialog(this, "ID must be a positive integer.",
@@ -250,7 +272,8 @@ public class SearchPanel extends javax.swing.JFrame {
             result.retainAll(manager.filterByDepartment(selectedDep));
         }
 
-        if (result.isEmpty()) {
+        boolean filtered = Validator.isNotEmpty(idText) || !nameText.isEmpty() || selectedDep != null;
+        if (result.isEmpty() && filtered) {
             JOptionPane.showMessageDialog(this, "No matching employee found.",
                     "Search", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -279,7 +302,8 @@ public class SearchPanel extends javax.swing.JFrame {
         tableModel.setRowCount(0);
         for (Employee emp : list) {
             tableModel.addRow(new Object[] { emp.getId(), emp.getName(), emp.getDepartment().getDepartmentName(),
-                    emp.getPosition(), emp.getType(), emp.calculateSalary() });
+                    emp.getPosition(), formatType(emp.getType()),
+                    String.format("%.2f", emp.calculateSalary()) });
         }
     }
 
@@ -289,8 +313,19 @@ public class SearchPanel extends javax.swing.JFrame {
             return null;
         }
 
-        int id = (int) tableModel.getValueAt(row, 0);
+        Object idValue = tableModel.getValueAt(row, 0);
+        int id = idValue instanceof Number ? ((Number) idValue).intValue() : Integer.parseInt(idValue.toString());
         return manager.searchById(id);
+    }
+
+    private String formatType(EmployeeType type) {
+        if (type == EmployeeType.FULL_TIME) {
+            return "Full-Time";
+        }
+        if (type == EmployeeType.PART_TIME) {
+            return "Part-Time";
+        }
+        return type == null ? "" : type.name();
     }
 
     // public static void main(String args[]) {

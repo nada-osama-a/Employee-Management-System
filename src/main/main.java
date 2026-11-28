@@ -1,5 +1,6 @@
 package main;
 
+import gui.AppTheme;
 import gui.LoginFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -10,6 +11,7 @@ public class main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
         }
+        AppTheme.installLookAndFeelDefaults();
         SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
     }
 }

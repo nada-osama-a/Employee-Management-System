@@ -23,8 +23,33 @@ public class ViewEmployee extends javax.swing.JFrame {
         this.employee = employee;
         this.onUpdated = onUpdated;
         initComponents();
+        applyTheme();
         loadEmployee();
         setLocationRelativeTo(null);
+    }
+
+    private void applyTheme() {
+        getContentPane().setBackground(AppTheme.BACKGROUND);
+        AppTheme.styleTitle(employeeName);
+        AppTheme.styleMutedLabel(positionDepartment);
+        AppTheme.styleLabel(jLabel2);
+        AppTheme.styleLabel(jLabel5);
+        AppTheme.styleLabel(jLabel6);
+        AppTheme.styleLabel(jLabel7);
+        AppTheme.styleSubtitle(jLabel8);
+        jLabel8.setText("Employee details");
+        jLabel8.setOpaque(false);
+        AppTheme.styleReadOnlyValue(id2);
+        AppTheme.styleReadOnlyValue(age1);
+        AppTheme.styleReadOnlyValue(jLabel4);
+        AppTheme.styleReadOnlyValue(salary);
+        AppTheme.styleReadOnlyValue(jLabel3);
+        id1.setVisible(false);
+        jLabel1.setText("");
+        AppTheme.stylePrimaryButton(update);
+        AppTheme.styleDangerButton(delete);
+        jSeparator1.setForeground(AppTheme.BORDER);
+        jSeparator1.setBackground(AppTheme.BORDER);
     }
     private void loadEmployee() {
         if (employee == null) {
@@ -38,16 +63,18 @@ public class ViewEmployee extends javax.swing.JFrame {
                 + employee.getDepartment().getDepartmentName());
         id2.setText(String.valueOf(employee.getId()));
         age1.setText(String.valueOf(employee.getAge()));
-        jLabel4.setText(String.valueOf(employee.getType()));
         salary.setText(String.format("%.2f EGP", employee.calculateSalary()));
+
+        String typeText = employee.getType() == EmployeeType.FULL_TIME ? "Full-Time" : "Part-Time";
+        jLabel4.setText(typeText);
 
         String details;
         if (employee instanceof FullTimeEmployee) {
             FullTimeEmployee f = (FullTimeEmployee) employee;
-            details = "       Basic salary: " + f.getBasicSalary() + "             Bonus: " + f.getBonus();
+            details = String.format("Basic salary: %.2f     Bonus: %.2f", f.getBasicSalary(), f.getBonus());
         } else if (employee instanceof PartTimeEmployee) {
             PartTimeEmployee p = (PartTimeEmployee) employee;
-            details = "       Hourly rate: " + p.getHourlyRate() + "               Hours: " + p.getHoursWorked();
+            details = String.format("Hourly rate: %.2f     Hours: %.2f", p.getHourlyRate(), p.getHoursWorked());
         } else {
             details = "";
         }
@@ -268,7 +295,7 @@ public class ViewEmployee extends javax.swing.JFrame {
 
         if (choice != JOptionPane.YES_OPTION) {
             delete.setSelected(false);
-            return;                                   // cancelled: employee stays
+            return;
         }
 
         if (employeeManager.deleteEmployee(employee.getId())) {
@@ -298,7 +325,8 @@ public class ViewEmployee extends javax.swing.JFrame {
                     if (onUpdated != null) {
                         onUpdated.run();
                     }
-                }).setVisible(true); 
+                }).setVisible(true);
+        update.setSelected(false); 
 
     }
     private javax.swing.JLabel age1;
