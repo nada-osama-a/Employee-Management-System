@@ -111,7 +111,7 @@ public class DashboardFrame extends JFrame {
     private void registerPages() {
         addPage("Home", buildHomePanel());
         addPage("Add Employee", addEmployeePanel);
-        addPage("Employees", searchPanel);
+        addPage("Update & View Employees", searchPanel);
         addPage("Add & show Departments", new DepartmentPanel(departmentManager, () -> {
             addEmployeePanel.refreshDepartments();
             searchPanel.refreshDepartments();

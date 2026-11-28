@@ -19,9 +19,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.JTableHeader;
 
-/**
- * Shared colors, fonts, and component styling so every screen looks consistent.
- */
+
 public final class AppTheme {
 
     public static final Color PRIMARY = new Color(25, 55, 95);

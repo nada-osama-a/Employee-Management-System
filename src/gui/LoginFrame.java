@@ -27,7 +27,7 @@ public class LoginFrame extends JFrame {
     public LoginFrame() {
         setTitle("Employee Management System - Login");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(460, 340);
+        setSize(600, 500);
         setLocationRelativeTo(null);
         setResizable(false);
         buildUi();
