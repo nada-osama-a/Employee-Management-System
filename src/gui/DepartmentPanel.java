@@ -9,7 +9,7 @@ import Service.DepartmentManager;
 public class DepartmentPanel extends JPanel {
 
     private DepartmentManager departmentManager;
-    private AddEmployeePanel employeePanel;
+    private Runnable onDepartmentsChanged;
 
     private JTextField idField;
     private JTextField nameField;
@@ -17,10 +17,10 @@ public class DepartmentPanel extends JPanel {
     private JTextArea departmentsArea;
 
     public DepartmentPanel(DepartmentManager departmentManager,
-            AddEmployeePanel employeePanel) {
+            Runnable onDepartmentsChanged) {
         System.out.println("DepartmentPanel Constructor Started");
         this.departmentManager = departmentManager;
-        this.employeePanel = employeePanel;
+        this.onDepartmentsChanged = onDepartmentsChanged;
 
         setLayout(new BorderLayout(15, 15));
         setBorder(BorderFactory.createEmptyBorder(20, 25, 20, 25));
@@ -106,17 +106,21 @@ public class DepartmentPanel extends JPanel {
 
             Department department = new Department(departmentId, name);
 
-            departmentManager.addDepartment(department);
-
-            JOptionPane.showMessageDialog(
-                    this, "Department added successfully!");
+            if (!departmentManager.addDepartment(department)) {
+                JOptionPane.showMessageDialog(this,
+                        "Could not add the department (duplicate or file error).");
+                return;
+            }
+            JOptionPane.showMessageDialog(this, "Department added successfully!");
 
             idField.setText("");
             nameField.setText("");
 
             updateDepartmentsList();
 
-            employeePanel.refreshDepartments();
+            if (onDepartmentsChanged != null) {
+                onDepartmentsChanged.run();
+            }
 
         } catch (NumberFormatException ex) {
 

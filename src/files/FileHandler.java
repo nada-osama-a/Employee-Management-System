@@ -39,6 +39,7 @@ public class FileHandler {
             out.writeObject(data);
             return true;
         } catch (IOException ex) {
+            ex.printStackTrace();
             return false;
         }
     }
@@ -53,6 +54,7 @@ public class FileHandler {
              ObjectInputStream in = new ObjectInputStream(fis)) {
             return (ArrayList<T>) in.readObject();
         } catch (IOException | ClassNotFoundException | ClassCastException ex) {
+            ex.printStackTrace();
             return new ArrayList<>();
         }
     }

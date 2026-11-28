@@ -31,6 +31,7 @@ public class DashboardFrame extends JFrame {
     private final DepartmentManager departmentManager = new DepartmentManager();
     private final List<Department> deps = departmentManager.getAllDepartments();
     private final AddEmployeePanel addEmployeePanel = new AddEmployeePanel(employeeManager, departmentManager);
+    private JLabel stats;
 
     public DashboardFrame(String username) {
         this.username = username;
@@ -89,9 +90,12 @@ public class DashboardFrame extends JFrame {
     }
     private void registerPages() {
         addPage("Home", buildHomePanel());
-        addPage("Add Employee", new AddEmployeePanel(employeeManager, departmentManager));
-        addPage("Employees", new SearchPanel(employeeManager, deps));   // JPanel or JFrame both work now
-        addPage("Departments", new DepartmentPanel(departmentManager, addEmployeePanel));
+        addPage("Add Employee", addEmployeePanel);
+        addPage("Employees", new SearchPanel(employeeManager,departmentManager));   // JPanel or JFrame both work now
+        addPage("Add & show Departments", new DepartmentPanel(departmentManager, () -> {
+            addEmployeePanel.refreshDepartments();
+            refreshStats();
+        }));
     }
 
     private void addPage(String title, JPanel panel) {
@@ -105,6 +109,9 @@ public class DashboardFrame extends JFrame {
     }
 
     private void showPage(String title) {
+        if ("Home".equals(title)) {
+            refreshStats(); 
+        }
         cardLayout.show(contentPanel, title);
     }
 
@@ -119,12 +126,17 @@ public class DashboardFrame extends JFrame {
         gbc.gridy = 0;
         home.add(welcome, gbc);
 
-        JLabel stats = new JLabel("Employees: " + employeeManager.getAllEmployees().size()
-                + "   |   Departments: " + departmentManager.getAllDepartments().size());
+        stats = new JLabel();
+        refreshStats();
         stats.setFont(new Font("SansSerif", Font.PLAIN, 16));
         gbc.gridy = 1;
         home.add(stats, gbc);
         return home;
+    }
+    
+    public void refreshStats() {
+        stats.setText("Employees: " + employeeManager.getAllEmployees().size()
+                + "   |   Departments: " + departmentManager.getAllDepartments().size());
     }
 
     private void logout() {

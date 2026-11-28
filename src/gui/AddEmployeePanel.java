@@ -28,6 +28,7 @@ public class AddEmployeePanel extends JPanel {
     private JTextField hoursWorkedField;
 
     private JPanel salaryPanel;
+    
 
     public AddEmployeePanel(EmployeeManager employeeManager,
             DepartmentManager departmentManager) {

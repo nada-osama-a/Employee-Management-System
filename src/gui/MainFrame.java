@@ -41,7 +41,9 @@ public class MainFrame extends JFrame {
 
         AddEmployeePanel employeePanel = new AddEmployeePanel(employeeManager, departmentManager);
 
-        DepartmentPanel departmentPanel = new DepartmentPanel(departmentManager, employeePanel);
+        DepartmentPanel departmentPanel = new DepartmentPanel(departmentManager, () -> {
+            employeePanel.refreshDepartments();
+        });
 
         tabs.addTab("Employees", employeePanel);
         tabs.addTab("Departments", departmentPanel);

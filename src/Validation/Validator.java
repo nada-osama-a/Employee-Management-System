@@ -33,9 +33,9 @@ public class Validator {
     }
 
     public static boolean isValidName(String name) {
-        return isNotEmpty(name);   
+        return isNotEmpty(name) && name.matches("^[\\p{L} ]+$");
     }
-
+    
     public static boolean isValidDepartment(String department) {
         return isNotEmpty(department);
     }
