@@ -68,7 +68,7 @@ public class Validator {
         try {
             double number = Double.parseDouble(value.trim());
             return number >= 0 && Double.isFinite(number);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e ) {
             return false;
         }
     }
